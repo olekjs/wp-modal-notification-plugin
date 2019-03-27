@@ -2,14 +2,12 @@
 
 class ModalNotification
 {
-    public function __construct()
-    {
+    public function __construct() {
         add_action('admin_menu', [$this, 'add_page']);
         // add_action('admin_init', [$this, 'page_init']);
     }
 
-    public function add_page()
-    {
+    public function add_page() {
         add_options_page(
             'Settings Admin',
             'Modal Notification',
