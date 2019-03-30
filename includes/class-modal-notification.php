@@ -17,20 +17,20 @@ class ModalNotification
     public function init_modal()
     {
         echo '
-	    	<div class="page-wrapper">
-			  <a class="btn trigger" href="javascript:;">Click Me!</a>
-			</div>
-			<div class="modal-wrapper">
-			  <div class="modal">
-			    <div class="head">
-			      <a class="btn-close trigger" href="javascript:;"></a>
-			    </div>
-			    <div class="content">';
-			   	echo get_option('modal_notification_content')['modal_notification_content'];
-			    echo '
-			    </div>
-			  </div>
-			</div>';
+            <div class="page-wrapper">
+              <a class="btn trigger" href="javascript:;">Click Me!</a>
+            </div>
+            <div class="modal-wrapper">
+              <div class="modal">
+                <div class="head">
+                  <a class="btn-close trigger" href="javascript:;"></a>
+                </div>
+                <div class="content">';
+                    echo $this->options['content'];
+                    echo '
+                </div>
+              </div>
+            </div>';
     }
 
     public function init_styles()
@@ -61,42 +61,42 @@ class ModalNotification
 
     public function create_page()
     {
-        $this->options = get_option('modal_notification_content');
+        $this->options = get_option('modal_notification');
         ?>
-			<div class="wrap">
-				<h2>Ustawienia okna z powiadomieniem</h2>
-				<form method="post" action="options.php">
-					<?php
-						settings_fields('modal_notification_group');
-				        do_settings_sections('modal_notification_settings_page');
-				        submit_button();
-			        ?>
-				</form>
-			</div>
-		<?php
-	}
+            <div class="wrap">
+                <h2>Ustawienia okna z powiadomieniem</h2>
+                <form method="post" action="options.php">
+                    <?php
+settings_fields('modal_notification_group');
+        do_settings_sections('modal_notification_settings_page');
+        submit_button();
+        ?>
+                </form>
+            </div>
+        <?php
+}
 
     public function page_init()
     {
         register_setting(
             'modal_notification_group',
-            'modal_notification_content',
+            'modal_notification',
             array($this, 'sanitize')
         );
 
         add_settings_section(
             'modal_notification_id',
             'Edycja okna z powiadomieniem',
-            array( $this, 'section_callback' ),
+            array($this, 'section_callback'),
             'modal_notification_settings_page'
-        ); 
+        );
 
         add_settings_field(
-            'modal_notification_content',
+            'content',
             'Kontent',
-            array( $this, 'content_callback' ),
+            array($this, 'content_callback'),
             'modal_notification_settings_page',
-            'modal_notification_id'          
+            'modal_notification_id'
         );
     }
 
@@ -104,8 +104,8 @@ class ModalNotification
     {
         $new_input = array();
 
-        if (isset($input['modal_notification_content'])) {
-            $new_input['modal_notification_content'] = sanitize_text_field($input['modal_notification_content']);
+        if (isset($input['content'])) {
+            $new_input['content'] = sanitize_text_field($input['content']);
         }
 
         return $new_input;
@@ -118,9 +118,9 @@ class ModalNotification
 
     public function content_callback()
     {
-         printf(
-            '<textarea id="modal_notification_content" name="modal_notification_content[modal_notification_content]" value="%s"> </textarea>',
-            isset( $this->options['modal_notification_content'] ) ? esc_attr( $this->options['modal_notification_content']) : ''
+        printf(
+            '<textarea id="content" name="modal_notification[content]" value="%s"> </textarea>',
+            isset($this->options['modal_notification']) ? esc_attr($this->options['modal_notification']) : ''
         );
     }
 }
