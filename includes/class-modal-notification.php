@@ -17,14 +17,16 @@ class ModalNotification
     }
 
     public function init_modal() {
-        echo 
-        '<div class="modal">
-        <a class="close-modal">X</a>
-        <div>';
-            echo get_option('modal_notification')['content'];
-            echo
-        '</div>
-        </div>';
+        ?>
+            <div class="modal">
+            <a class="close-modal">X</a>
+                <div>
+                    <?php
+                        echo get_option('modal_notification')['content'];
+                    ?>
+                </div>
+            </div>
+        <?php
     }
 
     public function add_page() {
@@ -124,7 +126,7 @@ class ModalNotification
                 return time()+3600;
                 break;
             case '2':
-                return time()+10800;
+                return time()+3600*3;
                 break;
             case '3':
                 return time()+3600*24;
