@@ -8,12 +8,7 @@ class ModalNotification
         add_action('admin_menu', [$this, 'add_page']);
         add_action('admin_init', [$this, 'page_init']);
 
-        $time = $this->getTimeWhenModalDisplay();
-
-        if(!isset($_COOKIE['modal-notification'])) {
-            add_action('the_content', [$this, 'init_modal']);
-            setcookie('modal-notification', 'set', $time);
-        }        
+        $this->setCookie();      
     }
 
     public function init_modal() {
@@ -90,7 +85,7 @@ class ModalNotification
         $new_input = array();
 
         if (isset($input['content'])) {
-            $new_input['content'] = sanitize_text_field($input['content']);
+            $new_input['content'] = wp_kses_post($input['content']);
         }
 
         if (isset($input['time'])) {
@@ -109,13 +104,13 @@ class ModalNotification
           <select name="modal_notification[time]" id="time">
           <option value="1" <?php selected($this->options['time'], 1); ?> >Co godzinę</option>
           <option value="2" <?php selected($this->options['time'], 2); ?> >Co 3 godziny</option>
-          <option value="3" <?php selected($this->options['time'], 3); ?> >Co 1 dzień</option>
+          <option value="3" <?php selected($this->options['time'], 3); ?> >Co 24 godziny</option>
           </select>
         <?php
     }
 
     public function content_callback() {
-        echo '<textarea id="content" name="modal_notification[content]" class="" rows="10" cols="100">'.$this->options['content'].'</textarea>';
+        wp_editor($this->options['content'], 'content', ['textarea_rows' => 10, 'textarea_name' => 'modal_notification[content]']); 
     }
 
     public function getTimeWhenModalDisplay() {
@@ -132,5 +127,14 @@ class ModalNotification
                 return time()+3600*24;
                 break;
         }
+    }
+
+    public function setCookie() {
+        $time = $this->getTimeWhenModalDisplay();
+
+        if(!isset($_COOKIE['modal-notification'])) {
+            add_action('the_content', [$this, 'init_modal']);
+            setcookie('modal-notification', 'set', $time);
+        }  
     }
 }
