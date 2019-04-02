@@ -1,7 +1,6 @@
 <?php
 
-class ModalNotification
-{
+class Modal_Notification {
     private $options;
 
     public function __construct() {

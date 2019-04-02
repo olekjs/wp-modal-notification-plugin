@@ -26,4 +26,4 @@ add_action('wp_head', 'init_scripts');
 
 require_once plugin_dir_path(__FILE__) . 'includes/class-modal-notification.php';
 
-new ModalNotification();
+new Modal_Notification();
